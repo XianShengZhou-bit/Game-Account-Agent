@@ -92,7 +92,7 @@ def reasoner(state: ReActState) -> Dict[str, Any]:
             "type": "function",
             "function": {
                 "name": "create_order",
-                "description": "创建订单",
+                "description": "创建订单, 价格必须从数据库中获取",
                 "parameters": {
                     "account_id": {"type": "string", "description": "账号ID"},
                     "buyer_id": {"type": "string", "description": "买家ID"},

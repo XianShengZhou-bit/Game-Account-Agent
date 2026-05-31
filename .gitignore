@@ -159,5 +159,42 @@ cython_debug/
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# LangGraph API
 .langgraph_api/
+
+# Frontend build
+frontend/dist/
+
+# Proto generated files
+proto/*.pb.cc
+proto/*.pb.h
+proto/*.grpc.pb.cc
+proto/*.grpc.pb.h
+proto/*_pb2.py
+proto/*_pb2_grpc.py
+proto/__pycache__/
+
+# Test binaries
+test/mysql_test/mysql_pool_test
+test/redis_test/redis_client_test
+
+# C++ build artifacts
+*.o
+*.obj
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Temporary files
+tmp.txt
+*.tmp
+*.bak

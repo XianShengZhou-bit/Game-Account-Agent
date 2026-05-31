@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional
 # 添加项目根目录到路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from agent.common.db import get_db_connection
+from agent.common.db import get_mysql_connection
 from agent.common.logging_config import setup_logger
 
 logger = setup_logger(__name__)
@@ -44,7 +44,7 @@ def create_accounts(
     conn = None
     cursor = None
     try:
-        conn = get_db_connection()
+        conn = get_mysql_connection()
         cursor = conn.cursor()
 
         # 将稀有物品列表转换为JSON
@@ -123,7 +123,7 @@ def search_accounts(
     conn = None
     cursor = None
     try:
-        conn = get_db_connection()
+        conn = get_mysql_connection()
         cursor = conn.cursor(dictionary=True)
 
         # 构建查询语句
@@ -229,7 +229,7 @@ def get_supported_games() -> Dict[str, Any]:
     conn = None
     cursor = None
     try:
-        conn = get_db_connection()
+        conn = get_mysql_connection()
         cursor = conn.cursor()
 
         cursor.execute(
@@ -296,7 +296,7 @@ def update_account(
     conn = None
     cursor = None
     try:
-        conn = get_db_connection()
+        conn = get_mysql_connection()
         cursor = conn.cursor()
 
         # 构建更新语句
@@ -405,7 +405,7 @@ def create_order(
     conn = None
     cursor = None
     try:
-        conn = get_db_connection()
+        conn = get_mysql_connection()
         cursor = conn.cursor(dictionary=True)
 
         # 先查询账号是否存在且状态为在售
@@ -428,36 +428,7 @@ def create_order(
                 "success": False,
                 "message": "账号状态不是待售"
             }
-
-        # 生成订单号
-        import uuid
-        from datetime import datetime
-        order_sn = f"ORD{datetime.now().strftime('%Y%m%d')}{uuid.uuid4().hex[:12].upper()}"
-
-        # 创建订单
-        cursor.execute("""
-            INSERT INTO orders (order_sn, account_id, buyer_id, price,
-                              buyer_phone, buyer_id_card, status, mutex)
-            VALUES (%s, %s, %s, %s, %s, %s, 0, false)
-        """, (order_sn, account['id'], buyer_id, price, buyer_phone, buyer_id_card))
-
-        conn.commit()
-
-        logger.info(f"订单创建成功: order_sn={order_sn}")
-        return {
-            "success": True,
-            "order_sn": order_sn,
-            "message": "订单创建成功"
-        }
-
-    except Exception as e:
-        logger.error(f"创建订单失败: {e}")
-        if conn:
-            conn.rollback()
-        return {
-            "success": False,
-            "message": f"创建订单失败：{str(e)}"
-        }
+    
 
     finally:
         if cursor:

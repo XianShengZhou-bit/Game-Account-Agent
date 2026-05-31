@@ -7,12 +7,12 @@ from mysql.connector import pooling
 
 load_dotenv()
 
-DB_CONFIG = {
-    "host": os.getenv("DB_HOST"),
-    "port": int(os.getenv("DB_PORT")),
-    "user": os.getenv("DB_USER"),
-    "password": os.getenv("DB_PASSWORD"),
-    "database": os.getenv("DB_DATABASE"),
+MYSQL_CONFIG = {
+    "host": os.getenv("MYSQL_HOST"),
+    "port": int(os.getenv("MYSQL_PORT")),
+    "user": os.getenv("MYSQL_USER"),
+    "password": os.getenv("MYSQL_PASSWORD"),
+    "database": os.getenv("MYSQL_DATABASE"),
     "charset": "utf8mb4",
     "use_unicode": True,
 }
@@ -20,18 +20,18 @@ DB_CONFIG = {
 _connection_pool = None
 
 
-def get_connection_pool():
-    """获取数据库连接池（延迟初始化）"""
+def get_mysql_connection_pool():
+    """获取MySQL数据库连接池（延迟初始化）"""
     global _connection_pool
     if _connection_pool is None:
         _connection_pool = pooling.MySQLConnectionPool(
             pool_name="agent_pool",
             pool_size=5,
-            **DB_CONFIG
+            **MYSQL_CONFIG
         )
     return _connection_pool
 
 
-def get_db_connection():
-    """从连接池获取数据库连接"""
-    return get_connection_pool().get_connection()
+def get_mysql_connection():
+    """从连接池获取MySQL数据库连接"""
+    return get_mysql_connection_pool().get_connection()

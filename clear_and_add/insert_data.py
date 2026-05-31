@@ -1,15 +1,23 @@
 import pymysql
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 sql_file_path = r'C:\Users\haipe\Desktop\game_account_exchange\clear_and_add\accounts_test_data.sql'
 
 db_config = {
-    'host': 'localhost',
-    'port': 3306,
-    'user': 'root',
-    'password': 'xianzun123$',
-    'database': 'game_account_exchange',
+    'host': os.getenv('MYSQL_HOST'),
+    'port': int(os.getenv('MYSQL_PORT')),
+    'user': os.getenv('MYSQL_USER'),
+    'password': os.getenv('MYSQL_PASSWORD'),
+    'database': os.getenv('MYSQL_DATABASE'),
     'charset': 'utf8mb4'
 }
+
+if not all([db_config['host'], db_config['port'], db_config['user'], db_config['password'], db_config['database']]):
+    print("Error: Missing required database configuration in .env file")
+    exit(1)
 
 try:
     connection = pymysql.connect(**db_config)

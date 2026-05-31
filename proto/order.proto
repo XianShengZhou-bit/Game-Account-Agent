@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package order;
+
+enum ERROR_CODE {
+    SUCCESS = 0;
+    ACCOUNT_LOCKED = 1;
+    ACCOUNT_SOLD = 2;
+    INVALID_TOKEN = 3;
+    TOKEN_EXPIRED = 4;
+    ORDER_NOT_FOUND = 5;
+    ORDER_PAID = 6;
+    BALANCE_INSUFFICIENT = 7;
+    INTERNAL_ERROR = 8;
+    DB_ERROR = 9;
+    REDIS_ERROR = 10;
+}
+
+message CreateOrderRequest {
+    string account_id = 1;
+    int64 buyer_id = 2;
+    string buyer_phone = 3;
+    string buyer_id_card = 4;
+}
+
+message CreateOrderResponse {
+    bool success = 1;
+    string order_sn = 2;
+    string payment_token = 3;
+    double price = 4;
+    string game_name = 5;
+    string server_area = 6;
+    string account_title = 7;
+    ErrorResponse error = 8;
+}
+
+message UpdateOrderStatusRequest {
+    string token = 1;
+    string password = 2;
+}
+
+message UpdateOrderStatusResponse {
+    bool success = 1;
+    ErrorResponse error = 2;
+}
+
+message ErrorResponse {
+    ERROR_CODE error_code = 1;
+    int32 http_status_code = 2;
+    string user_message = 3;
+    string error_message = 4;
+    int64 timestamp = 5;
+}
+
+service OrderService {
+    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+    rpc UpdateOrderStatus(UpdateOrderStatusRequest) returns (UpdateOrderStatusResponse);
+}
