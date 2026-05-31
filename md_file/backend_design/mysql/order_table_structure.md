@@ -9,7 +9,7 @@
 | `price`         | INT          | NOT NULL           | -      | -       | 交易金额(分)|
 | `buyer_phone`   | VARCHAR(20)  | NOT NULL           | -      | INDEX   | 买家预留手机号            |
 | `buyer_id_card` | VARCHAR(32)  | NOT NULL           | -      | INDEX   | 买家预留身份证号          |
-| `status`        | TINYINT      | NOT NULL           | 0      | INDEX   | 订单状态: 0-刚下单, 1-支付中, 2-已完成支付 |
+| `status`        | TINYINT      | NOT NULL           | 0      | INDEX   | 订单状态: 0-刚下单, 1-已支付|
 | `create_time`   | DATETIME     | NOT NULL           | -      | INDEX   | 订单创建时间              |
 | `mutex`         | BOOL         | NOT NULL           | false  | INDEX   | 写锁标识，false无人在写，true有人在写 |
 

@@ -36,20 +36,20 @@ app.add_middleware(
 STATIC_DIR = os.path.join(project_root, "static")
 app.mount("/images", StaticFiles(directory=os.path.join(STATIC_DIR, "images")), name="images")
 
-DB_CONFIG = {
-    "host": os.getenv("DB_HOST"),
-    "port": int(os.getenv("DB_PORT")),
-    "user": os.getenv("DB_USER"),
-    "password": os.getenv("DB_PASSWORD"),
-    "database": os.getenv("DB_DATABASE"),
+MYSQL_CONFIG = {
+    "host": os.getenv("MYSQL_HOST"),
+    "port": int(os.getenv("MYSQL_PORT")),
+    "user": os.getenv("MYSQL_USER"),
+    "password": os.getenv("MYSQL_PASSWORD"),
+    "database": os.getenv("MYSQL_DATABASE"),
     "charset": "utf8mb4",
     "use_unicode": True,
 }
 
 
-def get_db_connection():
-    """获取数据库连接"""
-    conn = mysql.connector.connect(**DB_CONFIG)
+def get_mysql_connection():
+    """获取MySQL数据库连接"""
+    conn = mysql.connector.connect(**MYSQL_CONFIG)
     conn.set_charset_collation('utf8mb4', 'utf8mb4_unicode_ci')
     return conn
 
@@ -96,7 +96,7 @@ def get_game_list():
     """获取所有游戏名称列表"""
     conn = None
     try:
-        conn = get_db_connection()
+        conn = get_mysql_connection()
         cursor = conn.cursor()
 
         cursor.execute("SELECT DISTINCT game_name FROM accounts ORDER BY game_name")
@@ -166,7 +166,7 @@ def get_accounts(
     """获取账号列表，支持筛选条件"""
     conn = None
     try:
-        conn = get_db_connection()
+        conn = get_mysql_connection()
         cursor = conn.cursor(dictionary=True)
 
         query = """
@@ -211,7 +211,7 @@ def get_account_detail(account_id: str):
     """获取账号详情"""
     conn = None
     try:
-        conn = get_db_connection()
+        conn = get_mysql_connection()
         cursor = conn.cursor(dictionary=True)
 
         cursor.execute("""
